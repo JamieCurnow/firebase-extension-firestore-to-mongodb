@@ -60,5 +60,5 @@ click the button that says "Trigger Cloud Function". That will open a side panel
 If you want to contribute to this extension or deploy your own version, you can use the following command to upload it to the Firebase Extensions Hub:
 
 ```bash
-firebase ext:dev:upload -s stable --repo https://github.com/JamieCurnow/firebase-extension-firestore-to-mongodb
+firebase ext:dev:upload jamiecurnow/firestore-to-mongodb
 ```
