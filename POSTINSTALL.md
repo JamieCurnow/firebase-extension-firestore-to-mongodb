@@ -1,4 +1,4 @@
-<!-- 
+<!--
 This file provides your users an overview of how to use your extension after they've installed it. All content is optional, but this is the recommended format. Your users will see the contents of this file in the Firebase console after they install the extension.
 
 Include instructions for using the extension and any important functional details. Also include **detailed descriptions** for any additional post-installation setup required by the user.
@@ -14,16 +14,16 @@ https://firebase.google.com/docs/extensions/publishers/user-documentation#writin
 
 You can test out this extension right away!
 
-Visit the following URL:
-${function:greetTheWorld.url}
+1. Go to your [Firestore dashboard](https://console.firebase.google.com/project/${param:PROJECT_ID}/firestore) in the Firebase console.
+2. Create a new document in the `${param:FIRESTORE_COLLECTION_PATH}` collection.
+3. In a few seconds, you should see the new document appear in your MongoDB database, in the `${param:MONGODB_COLLECTION_NAME}` collection of the `${param:MONGODB_DATABASE_NAME}` database.
 
 # Using the extension
 
-When triggered by an HTTP request, this extension responds with the following specified greeting: "${param:GREETING} World from ${param:EXT_INSTANCE_ID}".
+This extension will automatically sync any document creations, updates, or deletions from your `${param:FIRESTORE_COLLECTION_PATH}` collection in Firestore to your `${param:MONGODB_COLLECTION_NAME}` collection in MongoDB.
 
-To learn more about HTTP functions, visit the [functions documentation](https://firebase.google.com/docs/functions/http-events).
+The Firestore document ID will be stored in the `${param:FIRESTORE_DOC_ID_FIELD}` field in your MongoDB documents.
 
-<!-- We recommend keeping the following section to explain how to monitor extensions with Firebase -->
 # Monitoring
 
 As a best practice, you can [monitor the activity](https://firebase.google.com/docs/extensions/manage-installed-extensions#monitor) of your installed extension, including checks on its health, usage, and logs.
