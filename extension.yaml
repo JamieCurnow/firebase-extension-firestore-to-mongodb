@@ -42,7 +42,7 @@ billingRequired: true
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#resources-field
 resources:
   - name: syncToMongo
-    type: firebaseextensions.v1beta.function
+    type: firebaseextensions.v1beta.v2function
     description: >-
       A function that triggers on Firestore writes and syncs the data to MongoDB.
     properties:
