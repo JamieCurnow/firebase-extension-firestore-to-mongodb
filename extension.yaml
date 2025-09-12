@@ -3,22 +3,26 @@
 
 # Identifier for your extension
 # TODO: Replace this with an descriptive name for your extension.
-name: greet-the-world  
+name: firestore-to-mongodb  
 version: 0.0.1  # Follow semver versioning
 specVersion: v1beta  # Version of the Firebase Extensions specification
 
 # Friendly display name for your extension (~3-5 words)
-displayName: Greet the world
+displayName: Sync data from Firestore to MongoDB
 
 # Brief description of the task your extension performs (~1 sentence)
 description: >-
-  Sends the world a greeting.
+  This extension syncs a Firestore collection to a MongoDB database. It triggers on all write events (create, update, delete) in the Firestore collection and reflects those changes in the MongoDB collection. Perfect for syncing up to Firestore Enterprise.
 
-license: Apache-2.0  # https://spdx.org/licenses/
+author:
+  authorName: Jamie Curnow
+  url: https://github.com/JamieCurnow
+
+license: MIT  # https://spdx.org/licenses/
 
 # Public URL for the source code of your extension.
 # TODO:  Replace this with your GitHub repo.
-sourceUrl: https://github.com/ORG_OR_USER/REPO_NAME
+sourceUrl: https://github.com/JamieCurnow/firebase-extension-firestore-to-mongodb
 
 # Specify whether a paid-tier billing plan is required to use your extension.
 # Learn more in the docs: https://firebase.google.com/docs/extensions/reference/extension-yaml#billing-required-field
@@ -37,25 +41,55 @@ billingRequired: true
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#resources-field
 resources:
-  - name: greetTheWorld
+  - name: syncToMongo
     type: firebaseextensions.v1beta.function
     description: >-
-      HTTP request-triggered function that responds with a specified greeting message
+      A function that triggers on Firestore writes and syncs the data to MongoDB.
     properties:
-      # httpsTrigger is used for an HTTP triggered function.
-      httpsTrigger: {}
-      runtime: "nodejs16"
+      runtime: nodejs22
+      eventTrigger:
+        eventType: google.cloud.firestore.document.v1.written
+        resource: projects/${PROJECT_ID}/databases/(default)/documents/${param:FIRESTORE_COLLECTION_PATH}/{docId}
 
 # In the `params` field, set up your extension's user-configured parameters.
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#params-field
 params:
-  - param: GREETING
-    label: Greeting for the world
-    description: >-
-      What do you want to say to the world?
-      For example, Hello world? or What's up, world?
-    type: string
-    default: Hello
+  - param: MONGODB_CONNECTION_STRING
+    label: MongoDB Connection String
+    description: The connection string for your MongoDB database.
+    type: secret
     required: true
-    immutable: false
+    validationRegex: ^mongodb(\+srv)?:\/\/.+
+    validationErrorMessage: The connection string must be a valid MongoDB connection string.
+  - param: MONGODB_DATABASE_NAME
+    label: MongoDB Database Name
+    description: The name of the database to sync to.
+    type: string
+    required: true
+  - param: MONGODB_COLLECTION_NAME
+    label: MongoDB Collection Name
+    description: The name of the collection to sync to.
+    type: string
+    required: true
+  - param: FIRESTORE_COLLECTION_PATH
+    label: Firestore Collection Path
+    description: The path to the Firestore collection to sync from.
+    type: string
+    required: true
+  - param: FIRESTORE_DOC_ID_FIELD
+    label: Firestore Document ID Field
+    description: The name of the field in MongoDB to store the Firestore document ID.
+    type: string
+    default: __firestore_doc_id
+    required: false
+
+roles:
+  - role: datastore.user
+    reason: Allows the extension to access Firestore.
+  - role: secretmanager.secretAccessor
+    reason: Allows the extension to access the MongoDB connection string secret.
+
+apis:
+  - apiName: secretmanager.googleapis.com
+    reason: Allows the extension to access secrets.

@@ -10,6 +10,7 @@ The user will provide:
 - the name of the field to store the firestore document id (optional, defaults to '\_\_firestore_doc_id')
 
 The repo name is firebase-extension-firestore-to-mongodb
+The repo url is: https://github.com/JamieCurnow/firebase-extension-firestore-to-mongodb
 The repo description is:
 Firebase Extension to sync data from firestore to mongoDB
 

@@ -1,26 +1,54 @@
-/*
- * This template contains a HTTP function that responds
- * with a greeting when called
- *
- * Reference PARAMETERS in your functions code with:
- * `process.env.<parameter-name>`
- * Learn more about building extensions in the docs:
- * https://firebase.google.com/docs/extensions/publishers
- */
+import { onDocumentWritten } from 'firebase-functions/v2/firestore'
+import { initializeApp } from 'firebase-admin/app'
+import { MongoClient } from 'mongodb'
+import * as logger from 'firebase-functions/logger'
 
-import * as functions from "firebase-functions";
+initializeApp()
 
-exports.greetTheWorld = functions.https.onRequest(
-  (req: functions.Request, res: functions.Response) => {
-    // Here we reference a user-provided parameter
-    // (its value is provided by the user during installation)
-    const consumerProvidedGreeting = process.env.GREETING;
+const uri = process.env.MONGODB_CONNECTION_STRING
+const dbName = process.env.MONGODB_DATABASE_NAME
+const collectionName = process.env.MONGODB_COLLECTION_NAME
+const firestoreDocIdField = process.env.FIRESTORE_DOC_ID_FIELD || '__firestore_doc_id'
 
-    // And here we reference an auto-populated parameter
-    // (its value is provided by Firebase after installation)
-    const instanceId = process.env.EXT_INSTANCE_ID;
+let client: MongoClient
 
-    const greeting = `${consumerProvidedGreeting} World from ${instanceId}`;
+async function getMongoClient(): Promise<MongoClient> {
+  if (!uri) {
+    throw new Error('MongoDB connection string is not set.')
+  }
+  if (!client) {
+    client = await MongoClient.connect(uri)
+  }
+  return client
+}
 
-    res.send(greeting);
-  });
+export const syncToMongo = onDocumentWritten(
+  (process.env.FIRESTORE_COLLECTION_PATH || '') + '/{docId}',
+  async (event) => {
+    const docId = event.params.docId
+
+    const mongoClient = await getMongoClient()
+    if (!dbName || !collectionName) {
+      throw new Error('Database or collection name not set')
+    }
+    const db = mongoClient.db(dbName)
+    const collection = db.collection(collectionName)
+
+    // Document was deleted
+    if (!event.data?.after.exists) {
+      await collection.deleteOne({ [firestoreDocIdField]: docId })
+      logger.log(`Deleted document with Firestore ID: ${docId}`)
+      return
+    }
+
+    const data = event.data.after.data()
+    const doc = {
+      ...data,
+      [firestoreDocIdField]: docId
+    }
+
+    // Document was created or updated
+    await collection.updateOne({ [firestoreDocIdField]: docId }, { $set: doc }, { upsert: true })
+    logger.log(`Upserted document with Firestore ID: ${docId}`)
+  }
+)
