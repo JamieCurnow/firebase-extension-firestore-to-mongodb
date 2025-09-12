@@ -18,7 +18,7 @@ author:
   authorName: Jamie Curnow
   url: https://github.com/JamieCurnow
 
-license: MIT  # https://spdx.org/licenses/
+license: apache-2.0  # https://spdx.org/licenses/
 
 # Public URL for the source code of your extension.
 # TODO:  Replace this with your GitHub repo.
