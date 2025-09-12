@@ -48,6 +48,13 @@ To install this extension, you can either install it from the Firebase Extension
 | **Firestore Collection Path**   | The path to the Firestore collection to sync from.                                                     |
 | **Firestore Document ID Field** | The name of the field in MongoDB to store the Firestore document ID. Defaults to `__firestore_doc_id`. |
 
+## Troubleshooting
+
+permissions_error on Eventarc trigger for cloud function:
+If you encounter an issue where the function is never triggered, it's probably an IAM permissions issue.
+An easy way to check this is to go to Pub/Sub in the Google Cloud Console, click into any topic, and then
+click the button that says "Trigger Cloud Function". That will open a side panel and you may see an error message indicating a permissions issue.
+
 ## Development
 
 If you want to contribute to this extension or deploy your own version, you can use the following command to upload it to the Firebase Extensions Hub:

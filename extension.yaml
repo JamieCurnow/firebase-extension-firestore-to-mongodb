@@ -4,7 +4,7 @@
 # Identifier for your extension
 # TODO: Replace this with an descriptive name for your extension.
 name: firestore-to-mongodb  
-version: 0.0.1  # Follow semver versioning
+version: 0.0.2  # Follow semver versioning
 specVersion: v1beta  # Version of the Firebase Extensions specification
 
 # Friendly display name for your extension (~3-5 words)
@@ -36,6 +36,9 @@ billingRequired: true
 # In a `roles` field, list any IAM access roles required for your extension to operate.
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#roles-field
+roles:
+  - role: datastore.user
+    reason: Allows the extension to access Firestore.
 
 # In the `resources` field, list each of your extension's functions, including the trigger for each function.
 # Learn more in the docs:
@@ -50,6 +53,7 @@ resources:
         runtime: nodejs22
       eventTrigger:
         eventType: google.cloud.firestore.document.v1.written
+        triggerRegion: ${DATABASE_REGION}
         eventFilters:
           - attribute: database
             value: ${DATABASE}
@@ -75,30 +79,146 @@ params:
     required: true
     validationRegex: ^mongodb(\+srv)?:\/\/.+
     validationErrorMessage: The connection string must be a valid MongoDB connection string.
+  
   - param: MONGODB_DATABASE_NAME
     label: MongoDB Database Name
     description: The name of the database to sync to.
     type: string
     required: true
+  
   - param: MONGODB_COLLECTION_NAME
     label: MongoDB Collection Name
     description: The name of the collection to sync to.
     type: string
     required: true
+  
   - param: FIRESTORE_COLLECTION_PATH
     label: Firestore Collection Path
     description: The path to the Firestore collection to sync from.
     type: string
     required: true
+  
   - param: FIRESTORE_DOC_ID_FIELD
     label: Firestore Document ID Field
-    description: The name of the field in MongoDB to store the Firestore document ID.
+    description: >
+      The name of the field in MongoDB to store the Firestore document ID.
+      This will be used as the lookup key to match documents between Firestore and MongoDB.
+      If the document already exists in MongoDB, this should be a field that matches the Firestore document ID.
     type: string
     default: __firestore_doc_id
     required: false
 
-roles:
-  - role: run.invoker
-    reason: Allows the extension's function to be invoked by Eventarc.
-  - role: datastore.user
-    reason: Allows the extension to access Firestore.
+  - param: DATABASE_REGION
+    label: Firestore Instance Location
+    description: >
+      Where is the Firestore database located? You can check your current
+      database location at https://console.cloud.google.com/firestore/databases.
+    type: select
+    options:
+      # Multi-region locations
+      - label: Multi-region (Europe - Belgium and Netherlands)
+        value: eur3
+      - label: Multi-region (United States)
+        value: nam5
+      - label: Multi-region (Iowa, North Virginia, and Oklahoma)
+        value: nam7
+
+      # North America
+      - label: Iowa (us-central1)
+        value: us-central1
+      - label: Oregon (us-west1)
+        value: us-west1
+      - label: Los Angeles (us-west2)
+        value: us-west2
+      - label: Salt Lake City (us-west3)
+        value: us-west3
+      - label: Las Vegas (us-west4)
+        value: us-west4
+      - label: South Carolina (us-east1)
+        value: us-east1
+      - label: Northern Virginia (us-east4)
+        value: us-east4
+      - label: Columbus (us-east5)
+        value: us-east5
+      - label: Dallas (us-south1)
+        value: us-south1
+      - label: Montreal (northamerica-northeast1)
+        value: northamerica-northeast1
+      - label: Toronto (northamerica-northeast2)
+        value: northamerica-northeast2
+      - label: Queretaro (northamerica-south1)
+        value: northamerica-south1
+
+      # South America
+      - label: Sao Paulo (southamerica-east1)
+        value: southamerica-east1
+      - label: Santiago (southamerica-west1)
+        value: southamerica-west1
+
+      # Europe
+      - label: Belgium (europe-west1)
+        value: europe-west1
+      - label: London (europe-west2)
+        value: europe-west2
+      - label: Frankfurt (europe-west3)
+        value: europe-west3
+      - label: Netherlands (europe-west4)
+        value: europe-west4
+      - label: Zurich (europe-west6)
+        value: europe-west6
+      - label: Milan (europe-west8)
+        value: europe-west8
+      - label: Paris (europe-west9)
+        value: europe-west9
+      - label: Berlin (europe-west10)
+        value: europe-west10
+      - label: Turin (europe-west12)
+        value: europe-west12
+      - label: Madrid (europe-southwest1)
+        value: europe-southwest1
+      - label: Finland (europe-north1)
+        value: europe-north1
+      - label: Stockholm (europe-north2)
+        value: europe-north2
+      - label: Warsaw (europe-central2)
+        value: europe-central2
+
+      # Middle East
+      - label: Doha (me-central1)
+        value: me-central1
+      - label: Dammam (me-central2)
+        value: me-central2
+      - label: Tel Aviv (me-west1)
+        value: me-west1
+
+      # Asia
+      - label: Mumbai (asia-south1)
+        value: asia-south1
+      - label: Delhi (asia-south2)
+        value: asia-south2
+      - label: Singapore (asia-southeast1)
+        value: asia-southeast1
+      - label: Jakarta (asia-southeast2)
+        value: asia-southeast2
+      - label: Taiwan (asia-east1)
+        value: asia-east1
+      - label: Hong Kong (asia-east2)
+        value: asia-east2
+      - label: Tokyo (asia-northeast1)
+        value: asia-northeast1
+      - label: Osaka (asia-northeast2)
+        value: asia-northeast2
+      - label: Seoul (asia-northeast3)
+        value: asia-northeast3
+
+      # Australia
+      - label: Sydney (australia-southeast1)
+        value: australia-southeast1
+      - label: Melbourne (australia-southeast2)
+        value: australia-southeast2
+
+      # Africa
+      - label: Johannesburg (africa-south1)
+        value: africa-south1
+    required: true
+    immutable: false
