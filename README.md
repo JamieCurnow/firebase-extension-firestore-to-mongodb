@@ -39,14 +39,15 @@ To install this extension, you can either install it from the Firebase Extension
 
 ## Configuration Parameters
 
-| Parameter                       | Description                                                                                            |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| **Location**                    | The Cloud Functions location where you want to deploy the extension.                                   |
-| **MongoDB Connection String**   | Your MongoDB database connection string.                                                               |
-| **MongoDB Database Name**       | The name of the database to sync to.                                                                   |
-| **MongoDB Collection Name**     | The name of the collection to sync to.                                                                 |
-| **Firestore Collection Path**   | The path to the Firestore collection to sync from.                                                     |
-| **Firestore Document ID Field** | The name of the field in MongoDB to store the Firestore document ID. Defaults to `__firestore_doc_id`. |
+| Parameter                       | Description                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Firestore Database**          | The Firestore database to monitor. Most projects only use the default database, named "(default)".                                                                                                                                                                                                                                                 |
+| **MongoDB Connection String**   | Your MongoDB database connection string.                                                                                                                                                                                                                                                                                                           |
+| **MongoDB Database Name**       | The name of the database to sync to.                                                                                                                                                                                                                                                                                                               |
+| **MongoDB Collection Name**     | The name of the collection to sync to.                                                                                                                                                                                                                                                                                                             |
+| **Firestore Collection Path**   | The path to the Firestore collection to sync from.                                                                                                                                                                                                                                                                                                 |
+| **Firestore Document ID Field** | The name of the field in MongoDB to store the Firestore document ID. This field is used as the lookup key to match documents between Firestore and MongoDB. If you have existing documents in MongoDB that you want to sync with, ensure this field exists and contains the corresponding Firestore document ID. Defaults to `__firestore_doc_id`. |
+| **Firestore Instance Location** | The Cloud Functions location where you want to deploy the extension.                                                                                                                                                                                                                                                                               |
 
 ## Troubleshooting
 
