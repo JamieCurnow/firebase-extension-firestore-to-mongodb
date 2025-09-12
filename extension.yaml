@@ -47,7 +47,7 @@ resources:
       A function that triggers on Firestore writes and syncs the data to MongoDB.
     properties:
       buildConfig:
-        runtime: nodejs18
+        runtime: nodejs22
       eventTrigger:
         eventType: google.cloud.firestore.document.v1.written
         eventFilters:
