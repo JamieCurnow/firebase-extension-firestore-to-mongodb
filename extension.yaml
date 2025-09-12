@@ -46,15 +46,28 @@ resources:
     description: >-
       A function that triggers on Firestore writes and syncs the data to MongoDB.
     properties:
-      runtime: nodejs22
+      buildConfig:
+        runtime: nodejs18
       eventTrigger:
         eventType: google.cloud.firestore.document.v1.written
-        resource: projects/${PROJECT_ID}/databases/(default)/documents/${param:FIRESTORE_COLLECTION_PATH}/{docId}
+        eventFilters:
+          - attribute: database
+            value: ${DATABASE}
+          - attribute: document
+            value: ${FIRESTORE_COLLECTION_PATH}/{documentId}
+            operator: match-path-pattern
 
 # In the `params` field, set up your extension's user-configured parameters.
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#params-field
 params:
+  - param: DATABASE
+    label: Firestore Database
+    description: The Firestore database to monitor. Most projects only use the default database, named "(default)".
+    type: string
+    default: (default)
+    required: true
+
   - param: MONGODB_CONNECTION_STRING
     label: MongoDB Connection String
     description: The connection string for your MongoDB database.
