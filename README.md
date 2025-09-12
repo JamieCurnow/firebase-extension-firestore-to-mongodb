@@ -63,3 +63,18 @@ If you want to contribute to this extension or deploy your own version, you can 
 ```bash
 firebase ext:dev:upload jamiecurnow/firestore-to-mongodb
 ```
+
+Test in a project by running:
+
+```bash
+firebase ext:install /path/to/local/repo/mongo-firebase-extension
+```
+
+then:
+
+```bash
+firebase deploy --only extensions
+```
+
+Manage the extension in the Firebase Console.
+Manage the extension listing at <https://console.firebase.google.com/u/1/project/jamiecurnow-b4f1b/publisher/extensions/firestore-to-mongodb/v/0.0.1>
