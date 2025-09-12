@@ -98,5 +98,7 @@ params:
     required: false
 
 roles:
+  - role: run.invoker
+    reason: Allows the extension's function to be invoked by Eventarc.
   - role: datastore.user
     reason: Allows the extension to access Firestore.
