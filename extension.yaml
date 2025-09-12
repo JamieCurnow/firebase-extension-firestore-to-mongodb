@@ -87,9 +87,3 @@ params:
 roles:
   - role: datastore.user
     reason: Allows the extension to access Firestore.
-  - role: secretmanager.secretAccessor
-    reason: Allows the extension to access the MongoDB connection string secret.
-
-apis:
-  - apiName: secretmanager.googleapis.com
-    reason: Allows the extension to access secrets.
