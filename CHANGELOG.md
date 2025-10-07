@@ -1,3 +1,7 @@
+## Version 0.0.3
+
+Added missing icon key in extension.yaml file.
+
 ## Version 0.0.2
 
 Added missing icon.png file to the extension package.

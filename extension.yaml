@@ -4,7 +4,7 @@
 # Identifier for your extension
 # TODO: Replace this with an descriptive name for your extension.
 name: firestore-to-mongodb
-version: 0.0.2  # Follow semver versioning
+version: 0.0.3  # Follow semver versioning
 specVersion: v1beta  # Version of the Firebase Extensions specification
 
 # Friendly display name for your extension (~3-5 words)
@@ -13,6 +13,8 @@ displayName: Sync data from Firestore to MongoDB
 # Brief description of the task your extension performs (~1 sentence)
 description: >-
   This extension syncs a Firestore collection to a MongoDB database. It triggers on all write events (create, update, delete) in the Firestore collection and reflects those changes in the MongoDB collection. Perfect for syncing up to Firestore Enterprise.
+
+icon: icon.png
 
 author:
   authorName: Jamie Curnow
