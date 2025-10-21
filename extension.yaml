@@ -4,7 +4,7 @@
 # Identifier for your extension
 # TODO: Replace this with an descriptive name for your extension.
 name: firestore-to-mongodb
-version: 0.0.3  # Follow semver versioning
+version: 0.0.4 # Follow semver versioning
 specVersion: v1beta  # Version of the Firebase Extensions specification
 
 # Friendly display name for your extension (~3-5 words)
@@ -23,7 +23,6 @@ author:
 license: apache-2.0  # https://spdx.org/licenses/
 
 # Public URL for the source code of your extension.
-# TODO:  Replace this with your GitHub repo.
 sourceUrl: https://github.com/JamieCurnow/firebase-extension-firestore-to-mongodb
 
 # Specify whether a paid-tier billing plan is required to use your extension.
@@ -38,9 +37,13 @@ billingRequired: true
 # In a `roles` field, list any IAM access roles required for your extension to operate.
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#roles-field
-roles:
-  - role: datastore.user
-    reason: Allows the extension to access Firestore.
+
+# In the `externalServices` field, list any external services your extension uses.
+# Learn more in the docs:
+# https://firebase.google.com/docs/extensions/reference/extension-yaml#externalServices-field
+externalServices:
+  - name: MongoDB
+    pricingUri: https://www.mongodb.com/pricing
 
 # In the `resources` field, list each of your extension's functions, including the trigger for each function.
 # Learn more in the docs:
