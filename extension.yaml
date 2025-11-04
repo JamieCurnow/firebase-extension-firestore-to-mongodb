@@ -38,13 +38,6 @@ billingRequired: true
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#roles-field
 
-# In the `externalServices` field, list any external services your extension uses.
-# Learn more in the docs:
-# https://firebase.google.com/docs/extensions/reference/extension-yaml#externalServices-field
-externalServices:
-  - name: MongoDB
-    pricingUri: https://www.mongodb.com/pricing
-
 # In the `resources` field, list each of your extension's functions, including the trigger for each function.
 # Learn more in the docs:
 # https://firebase.google.com/docs/extensions/reference/extension-yaml#resources-field
